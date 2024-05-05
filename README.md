@@ -71,7 +71,7 @@ Upon a successful registration, that information is persisted into the database 
 
 ## Cloud Load Balancing
 
-Client Requests are routed across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization, ensuring workload distribution.
+Client HTTP Requests are routed across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization, ensuring workload distribution.
 
 If a single server goes down, the load balancer redirects traffic to the remaining online servers. More web servers can be added/removed easily, depending on the traffic load.
 
