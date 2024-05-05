@@ -2,8 +2,32 @@
 
 VirusTotal is an online file scanner which checks for malware, while extracting metadata from the uploaded content. It allows  a number of file submission methods, including a web uploader and programmatic API.
 
-
-[TOC]
+# Contents
+- [Architecture Diagram](#architecture-diagram)
+- [High Level Overview](#high-level-overview)
+- [Services and Tools](#services-and-tools)
+  * [User Service](#user-service)
+  * [Cloud Load Balancing](#cloud-load-balancing)
+  * [API Gateway](#api-gateway)
+    + [API Authentication](#api-authentication)
+  * [Redis Cache](#redis-cache)
+  * [Upload Service](#upload-service)
+  * [Virus Scanning Service](#virus-scanning-service)
+    + [User Scripts](#user-scripts)
+  * [Database (BigQuery)](#database--bigquery-)
+  * [Cloud Monitoring](#cloud-monitoring)
+  * [Error Reporting](#error-reporting)
+  * [Handling System Failures](#handling-system-failures)
+- [Data Model for Metadata Storage](#data-model-for-metadata-storage)
+  * [Table: file_metadata](#table--file-metadata)
+  * [Table: scan_results](#table--scan-results)
+  * [Table: users](#table--users)
+  * [Table: user_api_tokens](#table--user-api-tokens)
+- [3rd Party API](#3rd-party-api)
+    + [Process](#process)
+  * [Upload a File](#upload-a-file)
+  * [Download a File](#download-a-file)
+  * [Get a File Report](#get-a-file-report)
 
 
 
