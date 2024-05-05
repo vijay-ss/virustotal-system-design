@@ -14,7 +14,7 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
   * [Upload Service](#upload-service)
   * [Virus Scanning Service](#virus-scanning-service)
     + [User Scripts](#user-scripts)
-  * [Database (BigQuery)](#database--bigquery-)
+  * [Database](#database)
   * [Cloud Monitoring](#cloud-monitoring)
   * [Error Reporting](#error-reporting)
   * [Handling System Failures](#handling-system-failures)
@@ -133,7 +133,7 @@ When the user uploads a file for scanning, they can specify the additional pytho
 GKE will also support Windows VMs for scanning files in a particular environment.
 
 
-## Database (BigQuery)
+## Database
 
 Bigquery will be used to store data within the following tables:
 
