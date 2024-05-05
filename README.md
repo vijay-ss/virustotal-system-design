@@ -10,9 +10,9 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
 
 
 # Architecture Diagram
+![](img/VirusTotal_Architecture.png)
 
-
-# High Level Overview {#high-level-overview}
+# High Level Overview
 
 
 
@@ -25,7 +25,7 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
 7. Scan results are returned back to the user
 
 
-# Services and Tools {#services-and-tools}
+# Services and Tools
 
 
 
@@ -43,12 +43,12 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
 * Error/Failure reporting: Error Reporting
 
 
-## User Service {#user-service}
+## User Service
 
 Upon a successful registration, that information is persisted into the database and also the cache.
 
 
-## Cloud Load Balancing {#cloud-load-balancing}
+## Cloud Load Balancing
 
 Client Requests are routed across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization, ensuring workload distribution.
 
@@ -63,19 +63,19 @@ Possible LB Algorithms:
 * **Least Time**: Sends requests to the server selected by a formula that combines the fastest response time and fewest active connections.
 
 
-## API Gateway {#api-gateway}
+## API Gateway
 
 API Gateway is serverless and makes it easy to manage APIs for Cloud Functions, Cloud Run, GKE  and other GCP services. API Gateway includes security features like authentication and key validation as well as monitoring, logging, and tracing. With consumption-based pricing, it’s also easy to manage costs with API Gateway.
 
 
-### API Authentication {#api-authentication}
+### API Authentication
 
 JWT is used for both authentication and authorization as it is a standard for web applications. Upon user login via the User Service, the server (API Gateway) will generate a JWT that contains information about the user (user id, permissions). The JWT is signed using a secret key only known by the server. The server sends the JWT to the client, which can be used to access resources on the server.
 
 Commonly used signing algorithm HS256 which uses the same secret key to create and verify the signature.
 
 
-## Redis Cache {#redis-cache}
+## Redis Cache
 
 Memorystore will host a managed Redis cache instance for user authentication, storing session info and returning results back to the user (file scan or scripts). This results in lower latency compared to a persistent database like Bigquery.
 
@@ -84,7 +84,7 @@ Metadata cache servers are replicated; if a node goes down, the data will be ava
 API tokens will be stored for quick authentication and returning the secret access token.
 
 
-## Upload Service {#upload-service}
+## Upload Service
 
 The Upload Service will upload the file to a GCS bucket using an Eventarc trigger for a Cloud Function. Data in the bucket will be replicated in the same region and cross-region to guard against data loss. **Resumable uploads** are the recommended method for uploading large files over 100MB, because you don't have to restart the upload from the beginning if there is a network failure, while the upload is underway.
 
@@ -111,7 +111,7 @@ When the user uploads a file for scanning, they can specify the additional pytho
 GKE will also support Windows VMs for scanning files in a particular environment.
 
 
-## Database (BigQuery) {#database-bigquery}
+## Database (BigQuery)
 
 Bigquery will be used to store data within the following tables:
 
@@ -129,7 +129,7 @@ Tables will be partitioned by date and clustered by country and user_id. Multi-r
 **_Note: With sharded tables, BigQuery must maintain a copy of the schema and metadata for each table. BigQuery might also need to verify permissions for each queried table. This practice also adds to query overhead and affects query performance._
 
 
-## Cloud Monitoring {#cloud-monitoring}
+## Cloud Monitoring
 
 Metrics for further analysis will be automatically captured. This allows for monitoring of application/service health, as well as performance. Metrics include:
 
@@ -147,12 +147,12 @@ Custom breakdown by date/region/user can be added.
 Cloud Monitoring can also be integrated with Prometheus in the future if required for enhanced logging capabilities.
 
 
-## Error Reporting {#error-reporting}
+## Error Reporting
 
 Error Reporting counts, analyzes, and aggregates the crashes in your running cloud services. Error notifications will be sent immediately upon an exception. Error reporting also aggregates similar error types together for easier analysis.
 
 
-## Handling System Failures {#handling-system-failures}
+## Handling System Failures
 
 
 
@@ -165,7 +165,7 @@ Error Reporting counts, analyzes, and aggregates the crashes in your running clo
 * **Kubernetes cluster failure**: GKE is fully managed, and supports integration with Cloud Monitoring to check the health of clusters, nodes and containers. Auto repair automatically repairs a node which fails a health check. Also supports Global load balancing to distribute incoming requests across pools of instances across regions.
 
 
-# Data Model for Metadata Storage {#data-model-for-metadata-storage}
+# Data Model for Metadata Storage
 
 Tables will be created for storing the following data:
 
@@ -181,7 +181,7 @@ A common theme among the tables is a nested data format; Bigquery has good suppo
 The file_metadata payload can be modified on the fly, to include or exclude the following file info fields from VirusTotal: [https://docs.virustotal.com/reference/files](https://docs.virustotal.com/reference/files)
 
 
-## Table: file_metadata {#table-file_metadata}
+## Table: file_metadata
 
 
 
@@ -216,7 +216,7 @@ The file_metadata payload can be modified on the fly, to include or exclude the 
         * last_submission_date: <integer> most recent date the file was posted to VirusTotal. UTC timestamp.
 
 
-## Table: scan_results {#table-scan_results}
+## Table: scan_results
 
 
 
@@ -238,7 +238,7 @@ The file_metadata payload can be modified on the fly, to include or exclude the 
         * undetected: <integer> number of reports saying that is undetected.
 
 
-## Table: users {#table-users}
+## Table: users
 
 
 
@@ -255,7 +255,7 @@ The file_metadata payload can be modified on the fly, to include or exclude the 
         * user_since: <integer> user's join date as UTC timestamp.
 
 
-## Table: user_api_tokens {#table-user_api_tokens}
+## Table: user_api_tokens
 
 
 
@@ -267,12 +267,12 @@ The file_metadata payload can be modified on the fly, to include or exclude the 
         * date: <integer> create date as UTC timestamp.
 
 
-# 3rd Party API {#3rd-party-api}
+# 3rd Party API
 
 As stated under the API Gateway service section, JWT authentication will be used with a HS256 signing algorithm.
 
 
-### Process {#process}
+### Process
 
 
 
@@ -281,7 +281,7 @@ As stated under the API Gateway service section, JWT authentication will be used
 3. Respond back to the user with the results of the operation.
 
 
-## Upload a File {#upload-a-file}
+## Upload a File
 
 A standard file upload for scanning by VirusTotal
 
@@ -320,7 +320,7 @@ Sample response:
 ```
 
 
-## Download a File {#download-a-file}
+## Download a File
 
 Users can download a file which has been scanned.
 
@@ -355,7 +355,7 @@ Sample response:
 ```
 
 
-## Get a File Report {#get-a-file-report}
+## Get a File Report
 
 Users can get info about a file which has been scanned
 
