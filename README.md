@@ -1,5 +1,3 @@
-# virustotal-system-design
-
 # VirusTotal Clone System Design
 
 VirusTotal is an online file scanner which checks for malware, while extracting metadata from the uploaded content. It allows  a number of file submission methods, including a web uploader and programmatic API.
