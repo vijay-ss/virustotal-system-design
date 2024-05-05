@@ -2,6 +2,9 @@
 
 VirusTotal is an online file scanner which checks for malware, while extracting metadata from the uploaded content. It allows  a number of file submission methods, including a web uploader and programmatic API.
 
+# Architecture Diagram
+![](img/VirusTotal_Architecture.png)
+
 # Contents
 - [Architecture Diagram](#architecture-diagram)
 - [High Level Overview](#high-level-overview)
@@ -29,10 +32,6 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
   * [Download a File](#download-a-file)
   * [Get a File Report](#get-a-file-report)
 
-
-
-# Architecture Diagram
-![](img/VirusTotal_Architecture.png)
 
 # High Level Overview
 
