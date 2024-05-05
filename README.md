@@ -326,7 +326,7 @@ Sample CURL request:
 
 ```
 
-curl --request GET -L --output file_name\
+curl --request GET -L --output file_name \
 
   --url https://www.virustotal.com/api/v3/files/{id}/download \
 
@@ -342,9 +342,7 @@ Sample response:
 
   "data": {
 
-    "type": "analysis",
-
-    "id": "OTFiMDcwMjVjZDIzZTI0NGU4ZDlmMjI2NjkzZDczNGE6MTY1MzY1NDM3Nw=="
+	"file": "filename",
 
   }
 
@@ -361,7 +359,7 @@ Sample CURL request:
 
 ```
 
-curl --request GET -L --output file_name\
+curl --request GET -L --output file_name \
 
   --url https://www.virustotal.com/api/v3/files/{id} \
 
