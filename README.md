@@ -25,12 +25,12 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
   * [Table: file_metadata](#table--file-metadata)
   * [Table: scan_results](#table--scan-results)
   * [Table: users](#table--users)
-  * [Table: user_api_tokens](#table--user-api-tokens)
 - [3rd Party API](#3rd-party-api)
     + [Process](#process)
   * [Upload a File](#upload-a-file)
   * [Download a File](#download-a-file)
   * [Get a File Report](#get-a-file-report)
+- [References](#references)
 
 
 # High Level Overview
@@ -71,7 +71,7 @@ Upon a successful registration, that information is persisted into the database 
 
 ## Cloud Load Balancing
 
-Client HTTP Requests are routed across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization, ensuring workload distribution.
+Client HTTPS Requests are routed across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization, ensuring workload distribution.
 
 If a single server goes down, the load balancer redirects traffic to the remaining online servers. More web servers can be added/removed easily, depending on the traffic load.
 
@@ -91,7 +91,7 @@ API Gateway is serverless and makes it easy to manage APIs for Cloud Functions, 
 
 ### API Authentication
 
-JWT is used for both authentication and authorization as it is a standard for web applications. Upon user login via the User Service, the server (API Gateway) will generate a JWT that contains information about the user (user id, permissions). The JWT is signed using a secret key only known by the server. The server sends the JWT to the client, which can be used to access resources on the server.
+JWT is used for authorization as it is a standard for web applications. Upon user login via the User Service, the server (API Gateway) will generate a JWT that contains information about the user (user id, permissions). The JWT is signed using a secret key only known by the server. The server sends the JWT to the client, which can be used to access resources on the server.
 
 Commonly used signing algorithm HS256 which uses the same secret key to create and verify the signature.
 
@@ -102,7 +102,7 @@ Memorystore will host a managed Redis cache instance for user authentication, st
 
 Metadata cache servers are replicated; if a node goes down, the data will be available on the next node.
 
-API tokens will be stored for quick authentication and returning the secret access token.
+API info will be stored for quick authentication and obtaining refresh tokens.
 
 
 ## Upload Service
@@ -136,8 +136,6 @@ GKE will also support Windows VMs for scanning files in a particular environment
 
 Bigquery will be used to store data within the following tables:
 
-
-
 1. file_metadata
 2. users
 3. user_api_tokens
@@ -145,7 +143,9 @@ Bigquery will be used to store data within the following tables:
 
 Given the scale of the application, the table will combine clustering and partitioning to enhance query performance, intended for BI developers downstream. Clustered tables contain clustered columns which sort data into storage blocks - queries will scan the relevant blocks based on the clustered columns instead of the entire table or partition. Partitioned & clustered tables (in Bigquery) perform better than sharding (See note)
 
-Tables will be partitioned by date and clustered by country and user_id. Multi-region table replication will be enabled to protect against data loss.
+Google provides automatic partitioning and clustering which is a benefit over traditional database systems. An example is that tables can be partitioned by date and clustered by country and user_id. 
+
+Multi-region table replication will be enabled to protect against data loss.
 
 **_Note: With sharded tables, BigQuery must maintain a copy of the schema and metadata for each table. BigQuery might also need to verify permissions for each queried table. This practice also adds to query overhead and affects query performance._
 
@@ -153,8 +153,6 @@ Tables will be partitioned by date and clustered by country and user_id. Multi-r
 ## Cloud Monitoring
 
 Metrics for further analysis will be automatically captured. This allows for monitoring of application/service health, as well as performance. Metrics include:
-
-
 
 * API: server load for requests/response, latency of request/response, request count
 * GKE: avg memory usage, avg cpu usage,  avg container execution time
@@ -274,18 +272,6 @@ The file_metadata payload can be modified on the fly, to include or exclude the 
         * last_login: <integer> user's last login date as UTC timestamp. Only visible for the account's owner and its group's admin.
         * last_name: <string> user's last name. Can be modified by the account's owner.
         * user_since: <integer> user's join date as UTC timestamp.
-
-
-## Table: user_api_tokens
-
-
-
-* id
-* data
-    * token_details
-        * private_access_token: <string> user’s access token (encrypted)
-        * user_id: <string> user’s id
-        * date: <integer> create date as UTC timestamp.
 
 
 # 3rd Party API
@@ -409,5 +395,11 @@ Sample response:
   }
 
 }
-
 ```
+
+## References
+1. https://docs.virustotal.com/docs/how-it-works
+2. https://docs.virustotal.com/reference/files-scan
+3. https://docs.virustotal.com/reference/files
+4. https://www.virustotal.com/gui/file/0bf01094f5c699046d8228a8f5d5754ea454e5e58b4e6151fef37f32c83f6497/detection
+
