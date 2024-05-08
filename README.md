@@ -138,7 +138,6 @@ Bigquery will be used to store data within the following tables:
 
 1. file_metadata
 2. users
-3. user_api_tokens
 4. scan_results
 
 Given the scale of the application, the table will combine clustering and partitioning to enhance query performance, intended for BI developers downstream. Clustered tables contain clustered columns which sort data into storage blocks - queries will scan the relevant blocks based on the clustered columns instead of the entire table or partition. Partitioned & clustered tables (in Bigquery) perform better than sharding (See note)
