@@ -107,7 +107,7 @@ API info will be stored for quick authentication and obtaining refresh tokens.
 
 ## Upload Service
 
-The Upload Service will upload the file to a GCS bucket using an Eventarc trigger for a Cloud Function. Data in the bucket will be replicated in the same region and cross-region to guard against data loss. **Resumable uploads** are the recommended method for uploading large files over 100MB, because you don't have to restart the upload from the beginning if there is a network failure, while the upload is underway.
+The Upload Service will upload the file to a GCS bucket using a HTTPS trigger for a Cloud Function. Data in the bucket will be replicated in the same region and cross-region to guard against data loss. **Resumable uploads** are the recommended method for uploading large files over 100MB, because you don't have to restart the upload from the beginning if there is a network failure, while the upload is underway.
 
 File will be kept in standard storage, for high availability. If needed older files can be archived to save costs.
 
