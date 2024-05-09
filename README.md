@@ -48,8 +48,7 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
 
 # Services and Tools
 
-
-
+Cloud Platform: Google Cloud
 * User Service: Front end for user to register and upload files
 * Load Balancer: Cloud Load Balancer
 * API: API Gateway
