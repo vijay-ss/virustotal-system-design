@@ -39,7 +39,7 @@ VirusTotal is an online file scanner which checks for malware, while extracting 
 
 1. Authenticated user attempts to upload a file for scanning
 2. Load balancer routes the request to an available server
-3. Serverless function is triggered an uploads the file to storage
+3. Serverless function is triggered and uploads the file to cloud storage
 4. Message is sent to a queuing system on successful upload
 5. Virus Scanning Service spins up a container to scan the file and run additional user scripts if applicable
 6. Metadata about the scan is stored in a persistent database
